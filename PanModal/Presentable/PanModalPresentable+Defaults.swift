@@ -35,6 +35,10 @@ public extension PanModalPresentable where Self: UIViewController {
         8.0
     }
 
+    var maxPanModalWidth: CGFloat {
+        400.0
+    }
+
     var springDamping: CGFloat {
         0.8
     }

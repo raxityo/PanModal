@@ -63,6 +63,13 @@ public protocol PanModalPresentable: AnyObject {
     var cornerRadius: CGFloat { get }
 
     /**
+     The maximum width of the pan modal
+
+     Default Value is 400.0.
+     */
+    var maxPanModalWidth: CGFloat { get }
+
+    /**
      The springDamping value used to determine the amount of 'bounce'
      seen when transitioning to short/long form.
 

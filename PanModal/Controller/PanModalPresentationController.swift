@@ -99,6 +99,14 @@ open class PanModalPresentationController: UIPresentationController {
         presentedViewController as? PanModalPresentable
     }
 
+    private var containerFrame: CGRect {
+        guard var frame = containerView?.frame else { return .zero }
+        let oldWidth = frame.size.width
+        frame.size.width = min(oldWidth, presentable?.maxPanModalWidth ?? 0)
+        frame.origin.x = (oldWidth - frame.size.width) / 2
+        return frame
+    }
+
     // MARK: - Views
 
     /**
@@ -125,8 +133,7 @@ open class PanModalPresentationController: UIPresentationController {
      the presented view's properties
      */
     private lazy var panContainerView: PanContainerView = {
-        let frame = containerView?.frame ?? .zero
-        return PanContainerView(presentedView: presentedViewController.view, frame: frame)
+        return PanContainerView(presentedView: presentedViewController.view, frame: containerFrame)
     }()
 
     /**
@@ -378,10 +385,7 @@ private extension PanModalPresentationController {
      Reduce height of presentedView so that it sits at the bottom of the screen
      */
     func adjustPresentedViewFrame() {
-
-        guard let frame = containerView?.frame
-            else { return }
-
+        let frame = containerFrame
         let adjustedSize = CGSize(width: frame.size.width, height: frame.size.height - anchoredYPosition)
         let panFrame = panContainerView.frame
         panContainerView.frame.size = frame.size
@@ -817,7 +821,7 @@ private extension PanModalPresentationController {
             else { return }
 
         let yOffset = scrollView.contentOffset.y
-        let presentedSize = containerView?.frame.size ?? .zero
+        let presentedSize = containerFrame.size
 
         /**
          Decrease the view bounds by the y offset so the scroll view stays in place
